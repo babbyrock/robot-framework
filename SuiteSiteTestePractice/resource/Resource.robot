@@ -1,8 +1,11 @@
 *** Settings ***
 Library     SeleniumLibrary
+Library     String
 *** Variables ***
 ${BROWSER}      chrome
 ${URL}          http://automationpractice.com/index.php
+&{PESSOA}       nome=babby    sobrenome=rock
+
 *** Keywords ***
 #### Setup  e Teardown
 Abrir navegador
@@ -61,3 +64,53 @@ Conferir se o produto "${SUBCATEGORIA}" foi adicionado no carrinho com seus devi
     Element Text Should Be           xpath=//*[@id="product_1_1_0_0"]//p[@class="product-name"]     Faded Short Sleeve T-shirts
     Element Text Should Be           xpath=//*[@class="cart_unit"]/*[@class="price"]/span           $16.51
     Element Text Should Be           xpath=//*[@id="total_price"]                                   $18.51
+
+Adicionar o produto "t-shirt" no carrinho
+    Digitar o nome do produto "t-shirt" no campo de Pesquisar
+    Clicar no botão Pesquisar
+    Clicar no botão "Add to cart" do produto
+    Clicar no botão "Proceed to checkout"
+
+Excluir o produto do carrinho
+    Click Element         xpath=//*[@class="cart_quantity_delete"]
+
+Conferir se o carrinho fica vazio
+    Wait Until Element Is Visible    xpath=//*[@id="center_column"]/p[@class="alert alert-warning"]
+    Element Text Should Be           xpath=//*[@id="center_column"]/p[@class="alert alert-warning"]     Your shopping cart is empty.
+
+Clicar no botão superior direito "Sign in"
+    Click Element    xpath=//*[@id="header"]//*[@class="login"][contains(text(),"Sign in")]
+
+Criar um email customizado
+    [Arguments]   ${NOME}   ${SOBRENOME}
+    ${STRING_ALEATORIA}     Generate Random String
+    ${CUSTOM_EMAIL}         Set Variable    ${NOME}${SOBRENOME}${STRING_ALEATORIA}@email.com
+    [Return]                ${CUSTOM_EMAIL}
+Informar um e-mail válido
+    Wait Until Element Is Visible   id=email_create
+    ${EMAIL}    Criar um email customizado    ${PESSOA.nome}    ${PESSOA.sobrenome}
+    Input Text                      id=email_create    ${EMAIL}
+
+Clicar no botão "Create na account"
+    Click Button    id=SubmitCreate
+
+Preencher os dados obrigatórios
+    Wait Until Element Is Visible   xpath=//*[@id="account-creation_form"]//h3[contains(text(),"Your personal information")]
+    Click Element    id=id_gender1
+    Input Text       id=customer_firstname    Bárbara
+    Input Text       id=customer_lastname     Maria
+    Input Text       id=passwd                qualquercoisa
+    Input Text       id=firstname             Robot
+    Input Text       id=lastname              Framework
+    Input Text       id=address1              Rua Framework, Bairro Robot
+    Input Text       id=city                  Fortaleza
+    Input Text       id=postcode              66666
+    Input Text       id=phone_mobile          99988877
+    Input Text       id=alias                 Rua Robot, Bairro Framework
+    Set Focus To Element         id=id_state
+    Select From List By Index    id=id_state      9
+    Set Focus To Element         id=id_state
+    Select From List By Index    id=id_country    1
+
+Clicar em "Register" para finalizar o cadastro
+    Click Button    id=submitAccount

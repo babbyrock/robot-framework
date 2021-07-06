@@ -5,7 +5,7 @@ executar um arquivo inteiro
 
 
 
-robot -d.\result -t "Caso de Teste 04: Adicionar Produtos no Carrinho" tests\TestSitePractice.robot
+robot -d.\result -t "Caso de Teste 06: Adicionar Cliente" tests\TestSitePractice.robot
 ^^^^^
 |||||
 executar uma função inteira
