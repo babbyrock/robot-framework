@@ -9,3 +9,6 @@ robot -d.\result -t "Caso de Teste 06: Adicionar Cliente" tests\TestSitePractice
 ^^^^^
 |||||
 executar uma função inteira
+
+
+robot -d ./results processo\RPA_SolicitacaoOnvioAfastamentoSeq.robot
